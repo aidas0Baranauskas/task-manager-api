@@ -21,14 +21,4 @@ app.listen(port, () => {
 import Task from "./models/task.js";
 import User from "./models/user.js";
 
-const main = async () => {
-	// const task = await Task.findById("6426cedc50834cb8db042634");
-	// await user.populate('tasks')
-	// console.log(task.owner);
-
-	// const user = await User.findById("6425ea0ed701e885ca1d68c2");
-	// await user.populate("tasks");
-	// console.log(user.tasks);
-};
-
-main();
+// console.log(Task.deleteMany({}))

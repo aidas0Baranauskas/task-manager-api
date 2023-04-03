@@ -7,51 +7,56 @@ import jwt from "jsonwebtoken";
 // local imports
 import Task from "./task.js";
 
-const userSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required: [true, "Name is required"],
-		trim: true,
-	},
-	password: {
-		type: String,
-		required: true,
-		trim: true,
-		minLength: [6, "Must be at least 6 long"],
-		validate(value) {
-			if (value.toLowerCase().includes("password"))
-				throw new Error("You know damn well what you did wrong");
+const userSchema = new mongoose.Schema(
+	{
+		name: {
+			type: String,
+			required: [true, "Name is required"],
+			trim: true,
 		},
-	},
-	email: {
-		type: String,
-		unique: true,
-		required: true,
-		trim: true,
-		lowercase: true,
-		validate(value) {
-			if (!validator.isEmail(value)) {
-				throw new Error("Email is invalid");
-			}
-		},
-	},
-	age: {
-		type: Number,
-		default: 0,
-		min: [
-			0,
-			"You're either prematurely born and already sapient, or lied about being negative years old",
-		],
-	},
-	tokens: [
-		{
-			token: {
-				type: String,
-				required: true,
+		password: {
+			type: String,
+			required: true,
+			trim: true,
+			minLength: [6, "Must be at least 6 long"],
+			validate(value) {
+				if (value.toLowerCase().includes("password"))
+					throw new Error("You know damn well what you did wrong");
 			},
 		},
-	],
-});
+		email: {
+			type: String,
+			unique: true,
+			required: true,
+			trim: true,
+			lowercase: true,
+			validate(value) {
+				if (!validator.isEmail(value)) {
+					throw new Error("Email is invalid");
+				}
+			},
+		},
+		age: {
+			type: Number,
+			default: 0,
+			min: [
+				0,
+				"You're either prematurely born and already sapient, or lied about being negative years old",
+			],
+		},
+		tokens: [
+			{
+				token: {
+					type: String,
+					required: true,
+				},
+			},
+		],
+	},
+	{
+		timestamps: true,
+	}
+);
 
 userSchema.virtual("tasks", {
 	ref: "Task",
@@ -103,9 +108,11 @@ userSchema.pre("save", async function (next) {
 });
 
 // CASCADE DELETE OF TASKS FROM USER DELETION
-userSchema.pre("remove", async function (next) {
+// userSchema.pre("remove", async function (next) {
+
+userSchema.pre("deleteOne", { document: true }, async function (next) {
 	const user = this;
-	Task.deleteMany({ owner: user._id });
+	await Task.deleteMany({ owner: user._id });
 	next();
 });
 
