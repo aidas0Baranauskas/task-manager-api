@@ -7,7 +7,7 @@ import {
 
 test("Should add two nubers", async () => {
 	const sum = await add(10, 22);
-	expect(sum).toBe(323);
+	expect(sum).toBe(32);
 });
 
 // test("Should calculate total with tip", () => {
@@ -44,5 +44,3 @@ test("Should add two nubers", async () => {
 // 		done()
 // 	})
 // })
-
-
