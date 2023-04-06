@@ -2,7 +2,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand --detectOpenHandles"
   },
   "jest": {
     "testEnvironment": "node"
@@ -28,6 +28,7 @@
     "validator": "^13.9.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.21.2",
     "babel-jest": "^29.5.0",
     "dotenv": "^16.0.3",
     "env-cmd": "^10.1.0",
@@ -35,5 +36,12 @@
     "nodemon": "^2.0.22",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0"
+  },
+    "babel": {
+    "env": {
+      "test": {
+        "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      }
+    }
   }
 }
